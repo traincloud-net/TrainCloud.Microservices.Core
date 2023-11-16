@@ -18,6 +18,20 @@ public abstract class AbstractController<TController> : ControllerBase
 
     protected ILogger<TController> Logger { get; init; }
 
+    protected Guid? CurrentUserId
+    {
+        get
+        {
+            string? userId = HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return default;
+            }
+
+            return Guid.Parse(userId);
+        }
+    }
+
     protected AbstractController(IWebHostEnvironment webHostEnvironment,
                                  IHttpContextAccessor httpContextAccessor,
                                  IConfiguration configuration,
