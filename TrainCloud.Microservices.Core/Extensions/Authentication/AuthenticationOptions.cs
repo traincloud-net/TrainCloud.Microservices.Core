@@ -8,7 +8,7 @@ namespace TrainCloud.Microservices.Core.Extensions.Authentication;
 
 public class AuthenticationOptions
 {
-    public const string Position = "Token";
+    public const string Position = "Identity:Token";
 
     public string IssuerSigningKey { get; set; } = String.Empty;
 
