@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -9,7 +10,7 @@ namespace TrainCloud.Microservices.Core.Extensions.Swagger;
 
 public static class SwaggerExtensions
 {
-    public static IServiceCollection AddTrainCloudSwagger(this IServiceCollection services)
+    public static IServiceCollection AddTrainCloudSwagger(this IServiceCollection services, SwaggerOptions options)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(swaggerGenOptions =>
@@ -22,18 +23,18 @@ public static class SwaggerExtensions
 
             swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Title",// webApplicationBuilder.Configuration.GetSection("Swagger").GetValue<string>("Title"),
-                Description = "Description",// webApplicationBuilder.Configuration.GetSection("Swagger").GetValue<string>("Description"),
-                TermsOfService = new Uri("https://traincloud.net/Terms"),
+                Title = options.Title,
+                Description = options.Description,
+                TermsOfService = new Uri(options.TermsOfServiceUri),
                 Contact = new OpenApiContact
                 {
-                    Name = "TrainCloud",
-                    Email = "mail@traincloud.net"
+                    Name = options.ContactName,
+                    Email = options.ContactEmail
                 },
                 License = new OpenApiLicense
                 {
-                    Name = "MIT License",
-                    Url = new Uri("https://TrainCloud/LICENSE.txt")
+                    Name = options.LicenseName,
+                    Url = new Uri(options.LicenseUri)
                 },
                 Version = "v1"
             });
