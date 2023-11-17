@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace TrainCloud.Microservices.Core.Database;
 public static class DbContextExtensions
 {
-    public static WebApplicationBuilder AddDbContext<TDbContext>(this WebApplicationBuilder webApplicationBuilder) where TDbContext : DbContext
+    public static WebApplicationBuilder AddTrainCloudDbContext<TDbContext>(this WebApplicationBuilder webApplicationBuilder) where TDbContext : DbContext
     {
         webApplicationBuilder.Services.AddDbContext<TDbContext>(options =>
         {
