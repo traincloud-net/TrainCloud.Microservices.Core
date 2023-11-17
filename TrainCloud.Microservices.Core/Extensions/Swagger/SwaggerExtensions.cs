@@ -25,16 +25,17 @@ public static class SwaggerExtensions
             {
                 Title = options.Title,
                 Description = options.Description,
-                TermsOfService = new Uri(options.TermsOfServiceUri),
+                TermsOfService = new Uri(options.TermsOfService),
                 Contact = new OpenApiContact
                 {
                     Name = options.ContactName,
-                    Email = options.ContactEmail
+                    Email = options.ContactEmail,
+                    Url = new Uri("https://github.com/traincloud-net/")
                 },
                 License = new OpenApiLicense
                 {
                     Name = options.LicenseName,
-                    Url = new Uri(options.LicenseUri)
+                    Url = new Uri(options.LicenseUrl)
                 },
                 Version = "v1"
             });

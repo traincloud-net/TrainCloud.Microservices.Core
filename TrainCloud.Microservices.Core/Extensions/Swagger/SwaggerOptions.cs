@@ -14,7 +14,7 @@ public class SwaggerOptions
 
     public string Description { get; set; } = String.Empty;
 
-    public string TermsOfServiceUri { get; set; } = String.Empty;
+    public string TermsOfService { get; set; } = String.Empty;
 
     public string ContactName { get; set; } = String.Empty;
 
@@ -22,5 +22,5 @@ public class SwaggerOptions
 
     public string LicenseName { get; set; } = String.Empty;
 
-    public string LicenseUri { get; set; } = String.Empty;
+    public string LicenseUrl { get; set; } = String.Empty;
 }
