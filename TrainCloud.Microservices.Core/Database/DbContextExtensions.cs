@@ -32,4 +32,18 @@ public static class DbContextExtensions
 
         return webApplicationBuilder;
     }
+
+    public static async Task<WebApplication> MigrateTrainCloudDatabaseAsync<TDbContext>(this WebApplication webApplication) where TDbContext : DbContext
+    {
+        if (!webApplication.Environment.EnvironmentName.Equals("Test"))
+        {
+            using (IServiceScope scope = webApplication.Services.CreateScope())
+            {
+                TDbContext dbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+                await dbContext.Database.MigrateAsync();
+            }
+        }
+
+        return webApplication;
+    }
 }
