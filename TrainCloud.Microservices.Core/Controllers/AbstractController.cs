@@ -32,6 +32,20 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    protected Guid? CurrentTenantId
+    {
+        get
+        {
+            string? tenantId = HttpContext?.User?.FindFirst(ClaimTypes.UserData)?.Value;
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                return default;
+            }
+
+            return Guid.Parse(tenantId);
+        }
+    }
+
     protected AbstractController(IWebHostEnvironment webHostEnvironment,
                                  IHttpContextAccessor httpContextAccessor,
                                  IConfiguration configuration,
