@@ -22,18 +22,15 @@ public static class MessageBusExtensions
         return services;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
     public static IServiceCollection AddTrainCloudMessageBusSubscription(this IServiceCollection services, string subscriptionId)
     {
         services.AddHostedService(serviceProvider =>
         {
             IServiceScope scope = serviceProvider.CreateScope();
+
             IWebHostEnvironment webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             ILogger<MessageBusSubscriberService> logger = scope.ServiceProvider.GetRequiredService<ILogger<MessageBusSubscriberService>>();
+
             return new MessageBusSubscriberService(logger, webHostEnvironment, subscriptionId);
         });
 

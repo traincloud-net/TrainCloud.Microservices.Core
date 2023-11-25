@@ -34,17 +34,22 @@ public class MessageBusSubscriberService : IHostedService//, IDisposable
        while(IsRunning)
         {
             string projectId = "traincloud";
-            string fullSubscriptionId = $"{SubscriptionId}_{WebHostEnvironment.EnvironmentName}";
 
             // Subscribe to the topic.
-            SubscriptionName subscriptionName = new SubscriptionName(projectId, fullSubscriptionId);
+            SubscriptionName subscriptionName = new SubscriptionName(projectId, SubscriptionId);
 
             // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
             PullResponse response = await Subscriber.PullAsync(subscriptionName, maxMessages: 10);
             foreach (ReceivedMessage received in response.ReceivedMessages)
             {
                 PubsubMessage msg = received.Message;
+
+
                 Logger.LogWarning(msg.Data.ToString());
+
+                Logger.LogError(msg.Data.ToString());
+
+                Logger.LogCritical(msg.Data.ToString());
             }
 
             // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified

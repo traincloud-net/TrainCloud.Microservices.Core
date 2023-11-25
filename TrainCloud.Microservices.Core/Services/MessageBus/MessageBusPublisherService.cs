@@ -33,7 +33,6 @@ public class MessageBusPublisherService : AbstractService<MessageBusPublisherSer
     public async Task SendAsync<TData>(string topicId, TData data)
     {
         string projectId = "traincloud";
-        topicId = $"{topicId}_{WebHostEnvironment.EnvironmentName}";
         TopicName topicName = new TopicName(projectId, topicId);
 
         string dataString = JsonSerializer.Serialize(data);
