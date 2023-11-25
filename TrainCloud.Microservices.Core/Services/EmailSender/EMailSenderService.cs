@@ -31,6 +31,7 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
 
         var mailMessage = new MailMessage(userName, email, subject, htmlMessage)
         {
+            From = new MailAddress("mail@traincloud.net", "TrainCloud"),
             IsBodyHtml = true
         };
 

@@ -8,5 +8,5 @@ namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
 public interface IMessageBusPublisherService
 {
-    Task SendAsync<TData>(string topicId, TData data);
+    Task SendMessageAsync<TData>(string topicId, TData data);
 }

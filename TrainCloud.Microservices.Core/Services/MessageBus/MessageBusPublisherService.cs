@@ -6,12 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
@@ -30,7 +25,7 @@ public class MessageBusPublisherService : AbstractService<MessageBusPublisherSer
         Publisher = PublisherServiceApiClient.Create();
     }
 
-    public async Task SendAsync<TData>(string topicId, TData data)
+    public async Task SendMessageAsync<TData>(string topicId, TData data)
     {
         string projectId = "traincloud";
         TopicName topicName = new TopicName(projectId, topicId);
