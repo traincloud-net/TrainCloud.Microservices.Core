@@ -17,11 +17,11 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        await Task.Delay(0);
-        string hostName = Configuration.GetSection("Services").GetSection("System").GetSection("EMailSenderService").GetValue<string>("HostName")!;
-        int port = Configuration.GetSection("Services").GetSection("System").GetSection("EMailSenderService").GetValue<int>("Port");
-        string userName = Configuration.GetSection("EMail").GetValue<string>("UserName")!;
-        string password = Configuration.GetSection("EMail").GetValue<string>("Password")!;
+        var configSection = Configuration.GetSection("Services").GetSection("EMailSenderService");
+        string hostName = configSection.GetValue<string>("HostName")!;
+        int port = configSection.GetValue<int>("Port");
+        string userName = configSection.GetValue<string>("UserName")!;
+        string password = configSection.GetValue<string>("Password")!;
 
         var client = new SmtpClient(hostName, port)
         {
@@ -31,7 +31,7 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
 
         var mailMessage = new MailMessage(userName, email, subject, htmlMessage)
         {
-            From = new MailAddress("mail@traincloud.net", "TrainCloud"),
+            //From = new MailAddress("mail@traincloud.net", "TrainCloud"),
             IsBodyHtml = true
         };
 
