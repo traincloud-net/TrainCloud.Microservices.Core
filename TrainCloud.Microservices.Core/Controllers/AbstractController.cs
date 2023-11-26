@@ -18,20 +18,6 @@ public abstract class AbstractController<TController> : ControllerBase
 
     protected ILogger<TController> Logger { get; init; }
 
-    protected Guid? CurrentUserId
-    {
-        get
-        {
-            string? userId = HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return default;
-            }
-
-            return Guid.Parse(userId);
-        }
-    }
-
     protected Guid? CurrentTenantId
     {
         get
@@ -43,6 +29,34 @@ public abstract class AbstractController<TController> : ControllerBase
             }
 
             return Guid.Parse(tenantId);
+        }
+    }
+
+    protected Guid CurrentUserId
+    {
+        get
+        {
+            string? userId = HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Guid.Empty;
+            }
+
+            return Guid.Parse(userId);
+        }
+    }
+
+    protected string CurrentRole
+    {
+        get
+        {
+            string? role = HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
+            if (string.IsNullOrEmpty(role))
+            {
+                return string.Empty;
+            }
+
+            return role;
         }
     }
 
