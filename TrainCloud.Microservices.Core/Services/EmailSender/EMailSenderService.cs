@@ -18,6 +18,7 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         var configSection = Configuration.GetSection("Services").GetSection("EMailSenderService");
+        string sender = configSection.GetValue<string>("Sender")!;
         string hostName = configSection.GetValue<string>("HostName")!;
         int port = configSection.GetValue<int>("Port");
         string userName = configSection.GetValue<string>("UserName")!;
@@ -31,7 +32,7 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
 
         var mailMessage = new MailMessage(userName, email, subject, htmlMessage)
         {
-            //From = new MailAddress("mail@traincloud.net", "TrainCloud"),
+            From = new MailAddress(sender),
             IsBodyHtml = true
         };
 
