@@ -19,12 +19,12 @@ public static class DbContextExtensions
             switch (webApplicationBuilder.Environment.EnvironmentName)
             {
                 case "Test":
+                case "Development":
                     options.EnableDetailedErrors(true);
                     options.UseInMemoryDatabase(webApplicationBuilder.Environment.ApplicationName);
                     break;
-                case "Development":
                 case "Production":
-                    options.EnableDetailedErrors(true);
+                    options.EnableDetailedErrors(false);
                     options.UseNpgsql(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
                     break;
             }
@@ -35,7 +35,7 @@ public static class DbContextExtensions
 
     public static async Task<WebApplication> MigrateTrainCloudDatabaseAsync<TDbContext>(this WebApplication webApplication) where TDbContext : DbContext
     {
-        if (!webApplication.Environment.EnvironmentName.Equals("Test"))
+        if (webApplication.Environment.EnvironmentName.Equals("Production"))
         {
             using (IServiceScope scope = webApplication.Services.CreateScope())
             {
