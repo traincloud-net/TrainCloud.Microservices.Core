@@ -21,7 +21,7 @@ public static class DbContextExtensions
                 case "Test":
                 case "Development":
                     options.EnableDetailedErrors(true);
-                    options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                    options.UseInMemoryDatabase(webApplicationBuilder.Environment.ApplicationName);
                     break;
                 case "Production":
                     options.EnableDetailedErrors(false);
