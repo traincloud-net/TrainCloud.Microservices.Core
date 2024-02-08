@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Mail;
@@ -8,11 +10,14 @@ namespace TrainCloud.Microservices.Core.Services.EMailSender;
 
 public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSender
 {
+    private IWebHostEnvironment Environment { get; init; }
+
     public EMailSenderService(IConfiguration configuration,
-                              ILogger<EMailSenderService> logger)
+                              ILogger<EMailSenderService> logger,
+                              IWebHostEnvironment environment)
         : base(configuration, logger)
     {
-
+        Environment = environment;
     }
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -36,7 +41,10 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
             IsBodyHtml = true
         };
 
-        await client.SendMailAsync(mailMessage);
+        if (Environment.IsProduction() || Environment.IsStaging())
+        {
+            await client.SendMailAsync(mailMessage);
+        }
     }
 }
 
