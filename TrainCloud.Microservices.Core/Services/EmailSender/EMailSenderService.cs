@@ -44,6 +44,11 @@ public class EMailSenderService : AbstractService<EMailSenderService>, IEmailSen
         if (Environment.IsProduction() || Environment.IsStaging())
         {
             await client.SendMailAsync(mailMessage);
+            Logger.LogInformation($"SendEmailAsync: {Environment.EnvironmentName}");
+        }
+        else
+        {
+            Logger.LogInformation($"SendEmailAsync Mock: {Environment.EnvironmentName}");
         }
     }
 }
