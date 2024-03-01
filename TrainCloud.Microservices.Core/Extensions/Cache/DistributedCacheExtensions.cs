@@ -19,14 +19,14 @@ public static class DistributedCacheExtensions
     /// <typeparam name="TObject">The type of the requested object</typeparam>
     public async static Task SetObjectAsync<TObject>(this IDistributedCache cache,
                                                      string key,
-                                                     TObject @object,
+                                                     TObject objectToCache,
                                                      DistributedCacheEntryOptions? entryOptions = null,
                                                      CancellationToken cancellationToken = default)
     {
-        using (var msObject = new MemoryStream())
+        using (var msObjectToCache = new MemoryStream())
         {
-            await JsonSerializer.SerializeAsync(msObject, @object);
-            byte[] objectBytes = msObject.ToArray();
+            await JsonSerializer.SerializeAsync(msObjectToCache, objectToCache);
+            byte[] objectBytes = msObjectToCache.ToArray();
 
             if (entryOptions is not null)
             {
@@ -56,16 +56,16 @@ public static class DistributedCacheExtensions
             return default;
         }
 
-        byte[] objectBytes = await cache.GetAsync(key, cancellationToken);
+        byte[]? objectBytes = await cache.GetAsync(key, cancellationToken);
         if (objectBytes is null)
         {
             return default;
         }
 
-        using (var msObject = new MemoryStream(objectBytes))
+        using (var msObjectFromCache = new MemoryStream(objectBytes))
         {
-            TObject? @object = await JsonSerializer.DeserializeAsync<TObject?>(msObject);
-            return @object;
+            TObject? objectFromCache = await JsonSerializer.DeserializeAsync<TObject?>(msObjectFromCache);
+            return objectFromCache;
         }
     }
 

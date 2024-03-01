@@ -91,11 +91,6 @@ public abstract class AbstractController<TController> : ControllerBase
         return StatusCode(415);
     }
 
-    protected ActionResult TooManyRequests()
-    {
-        return StatusCode(429);
-    }
-
     protected ActionResult InternalServerError(Exception ex)
     {
         Logger.LogError(ex.Message, ex);
