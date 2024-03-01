@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
@@ -67,11 +67,16 @@ public static class SwaggerExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseTrainCloudSwagger(this IApplicationBuilder applicationBuilder)
+    public static WebApplication UseTrainCloudSwagger(this WebApplication webApplication)
     {
-        applicationBuilder.UseSwagger();
-        applicationBuilder.UseSwaggerUI();
-        return applicationBuilder;
+        webApplication.UseSwagger();
+
+        if (webApplication.Environment.IsDevelopment())
+        {
+            webApplication.UseSwaggerUI();
+        }
+
+        return webApplication;
     }
 
 }
