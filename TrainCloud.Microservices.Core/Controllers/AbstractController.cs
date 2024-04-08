@@ -18,20 +18,6 @@ public abstract class AbstractController<TController> : ControllerBase
 
     protected ILogger<TController> Logger { get; init; }
 
-    protected Guid? CurrentTenantId
-    {
-        get
-        {
-            string? tenantId = HttpContext?.User?.FindFirst(ClaimTypes.UserData)?.Value;
-            if (string.IsNullOrEmpty(tenantId))
-            {
-                return default;
-            }
-
-            return Guid.Parse(tenantId);
-        }
-    }
-
     protected Guid CurrentUserId
     {
         get
@@ -46,17 +32,37 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
-    protected string CurrentRole
+    protected List<string>? CurrentRoles
     {
         get
         {
-            string? role = HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
-            if (string.IsNullOrEmpty(role))
+            List<string>? roles = HttpContext?.User?.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+            return roles;
+        }
+    }
+
+    protected Guid? CurrentTenantId
+    {
+        get
+        {
+            string? tenantId = HttpContext?.User?.FindFirst("TenantId")?.Value;
+            if (string.IsNullOrEmpty(tenantId))
             {
-                return string.Empty;
+                return default;
             }
 
-            return role;
+            return Guid.Parse(tenantId);
+        }
+    }
+
+    protected string? CurrentTenantName
+    {
+        get
+        {
+            string? tenantName = HttpContext?.User?.FindFirst("TenantName")?.Value;
+
+            return tenantName;
         }
     }
 
