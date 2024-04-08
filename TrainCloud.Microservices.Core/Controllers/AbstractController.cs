@@ -32,6 +32,26 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    protected string? CurrentUserDocumentId
+    {
+        get
+        {
+            string? userDocumentId = HttpContext?.User?.FindFirst("DocumentId")?.Value;
+
+            return userDocumentId;
+        }
+    }
+
+    protected string? CurrentUserEMail
+    {
+        get
+        {
+            string? userEMail = HttpContext?.User?.FindFirst("EMail")?.Value;
+
+            return userEMail;
+        }
+    }
+
     protected List<string>? CurrentRoles
     {
         get
@@ -61,6 +81,16 @@ public abstract class AbstractController<TController> : ControllerBase
         get
         {
             string? tenantName = HttpContext?.User?.FindFirst("TenantName")?.Value;
+
+            return tenantName;
+        }
+    }
+
+    protected string? CurrentTenantEMail
+    {
+        get
+        {
+            string? tenantName = HttpContext?.User?.FindFirst("TenantEMail")?.Value;
 
             return tenantName;
         }
