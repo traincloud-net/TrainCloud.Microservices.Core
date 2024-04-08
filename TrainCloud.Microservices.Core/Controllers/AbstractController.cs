@@ -96,6 +96,16 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    protected string? CurrentTenantVKM
+    {
+        get
+        {
+            string? vkm = HttpContext?.User?.FindFirst("VKM")?.Value;
+
+            return vkm;
+        }
+    }
+
     protected AbstractController(IWebHostEnvironment webHostEnvironment,
                                  IHttpContextAccessor httpContextAccessor,
                                  IConfiguration configuration,
