@@ -56,7 +56,7 @@ public abstract class AbstractController<TController> : ControllerBase
     {
         get
         {
-            string? userName = HttpContext?.User?.FindFirst("UserName")?.Value;
+            string? userName = HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
 
             return userName;
         }
