@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,21 +21,6 @@ public static class MessageBusExtensions
     public static IServiceCollection AddTrainCloudMessageBusPublisher(this IServiceCollection services)
     {
         services.AddScoped<IMessageBusPublisherService, MessageBusPublisherService>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddTrainCloudMessageBusSubscription(this IServiceCollection services, string subscriptionId)
-    {
-        //services.AddHostedService(serviceProvider =>
-        //{
-        //    IServiceScope scope = serviceProvider.CreateScope();
-
-        //    IWebHostEnvironment webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-        //    ILogger<MessageBusSubscriberService> logger = scope.ServiceProvider.GetRequiredService<ILogger<MessageBusSubscriberService>>();
-
-        //    return new MessageBusSubscriberService(logger, webHostEnvironment, subscriptionId);
-        //});
 
         return services;
     }

@@ -9,6 +9,8 @@ namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
 public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractService<AbstractMessageBusSubscriberService<TMessage>>, IHostedService
 {
+    protected IServiceScopeFactory ServiceScopeFactory { get; init; }
+
     private string SubscriptionId { get; init; }
 
     private SubscriberServiceApiClient Subscriber { get; init; }
@@ -17,9 +19,11 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     public AbstractMessageBusSubscriberService(IConfiguration configuration,
                                                ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,
+                                               IServiceScopeFactory serviceScopeFactory,
                                                string subscriptionId)
         : base(configuration, logger)
     {
+        ServiceScopeFactory = serviceScopeFactory;  
         SubscriptionId = subscriptionId;
         Subscriber = SubscriberServiceApiClient.Create();
     }
@@ -63,8 +67,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     public virtual async Task OnMessageAsync(TMessage message)
     {
-        await Task.Delay(0);
-        Logger.LogCritical("BaseClassMessage");
+        await Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
