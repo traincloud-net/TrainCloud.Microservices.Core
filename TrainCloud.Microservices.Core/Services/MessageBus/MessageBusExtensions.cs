@@ -17,7 +17,7 @@ public static class MessageBusExtensions
     /// <returns></returns>
     public static IServiceCollection AddTrainCloudMessageBusPublisher(this IServiceCollection services)
     {
-        services.AddSingleton<IMessageBusPublisherService, MessageBusPublisherService>();
+        services.AddScoped<IMessageBusPublisherService, MessageBusPublisherService>();
 
         return services;
     }
