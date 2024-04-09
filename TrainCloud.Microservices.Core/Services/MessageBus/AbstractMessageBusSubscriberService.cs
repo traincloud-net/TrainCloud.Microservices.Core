@@ -49,7 +49,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
                 TMessage message = JsonSerializer.Deserialize<TMessage>(messageString)!;
 
-                OnMessage(message);
+                await OnMessageAsync(message);
             }
 
             // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
@@ -61,8 +61,9 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         }
     }
 
-    public virtual void OnMessage(TMessage message)
+    public virtual async Task OnMessageAsync(TMessage message)
     {
+        await Task.Delay(0);
         Logger.LogCritical("BaseClassMessage");
     }
 
