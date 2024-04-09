@@ -13,8 +13,6 @@ namespace TrainCloud.Microservices.Core.Services.MessageBus;
 public class MessageBusPublisherService : AbstractService<MessageBusPublisherService>, IMessageBusPublisherService
 {
     protected IWebHostEnvironment WebHostEnvironment { get; init; }
-
-    private PublisherServiceApiClient Publisher { get; init; }
  
     public MessageBusPublisherService(IConfiguration configuration,
                                       ILogger<MessageBusPublisherService> logger,
@@ -22,11 +20,12 @@ public class MessageBusPublisherService : AbstractService<MessageBusPublisherSer
         : base(configuration, logger)
     {
         WebHostEnvironment = webHostEnvironment;
-        Publisher = PublisherServiceApiClient.Create();
     }
 
     public async Task SendMessageAsync<TData>(string topicId, TData data)
     {
+        PublisherServiceApiClient publisher = PublisherServiceApiClient.Create();
+
         string projectId = "traincloud";
         TopicName topicName = new TopicName(projectId, topicId);
 
@@ -39,6 +38,6 @@ public class MessageBusPublisherService : AbstractService<MessageBusPublisherSer
                            { "ApplicationName", WebHostEnvironment.ApplicationName }}
         };
 
-        await Publisher.PublishAsync(topicName, new[] { message });
+        await publisher.PublishAsync(topicName, new[] { message });
     }
 }

@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
-public static class MessageBusExtensions
+public static class MessageBusExtensions 
 {
     /// <summary>
     /// Singleton
@@ -24,15 +26,15 @@ public static class MessageBusExtensions
 
     public static IServiceCollection AddTrainCloudMessageBusSubscription(this IServiceCollection services, string subscriptionId)
     {
-        services.AddHostedService(serviceProvider =>
-        {
-            IServiceScope scope = serviceProvider.CreateScope();
+        //services.AddHostedService(serviceProvider =>
+        //{
+        //    IServiceScope scope = serviceProvider.CreateScope();
 
-            IWebHostEnvironment webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-            ILogger<MessageBusSubscriberService> logger = scope.ServiceProvider.GetRequiredService<ILogger<MessageBusSubscriberService>>();
+        //    IWebHostEnvironment webHostEnvironment = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        //    ILogger<MessageBusSubscriberService> logger = scope.ServiceProvider.GetRequiredService<ILogger<MessageBusSubscriberService>>();
 
-            return new MessageBusSubscriberService(logger, webHostEnvironment, subscriptionId);
-        });
+        //    return new MessageBusSubscriberService(logger, webHostEnvironment, subscriptionId);
+        //});
 
         return services;
     }
