@@ -1,5 +1,6 @@
 ﻿using Google.Cloud.PubSub.V1;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -8,27 +9,26 @@ namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
 public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractService<AbstractMessageBusSubscriberService<TMessage>>, IHostedService
 {
-    private bool IsRunning { get; set; } = true;
- 
-    private string ProjectId { get; init; } = "traincloud";
-
-    protected virtual string SubscriptionId { get; set; } = string.Empty;
+    private string SubscriptionId { get; init; }
 
     private SubscriberServiceApiClient Subscriber { get; init; }
 
-    protected AbstractMessageBusSubscriberService(IConfiguration configuration,
-                                                  ILogger<AbstractMessageBusSubscriberService<TMessage>> logger)
+    private bool IsRunning { get; set; } = true;
+
+    public AbstractMessageBusSubscriberService(IConfiguration configuration,
+                                               ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,
+                                               string subscriptionId)
         : base(configuration, logger)
     {
+        SubscriptionId = subscriptionId;
         Subscriber = SubscriberServiceApiClient.Create();
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken stoppingToken)
     {
         Task newTask = new(async () => await DoWork());
 
         newTask.Start();
-        
         return Task.CompletedTask;
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         while (IsRunning)
         {
             // Subscribe to the topic.
-            SubscriptionName subscriptionName = new SubscriptionName(ProjectId, SubscriptionId);
+            SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
 
             // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
             PullResponse response = await Subscriber.PullAsync(subscriptionName, maxMessages: 10);
@@ -63,13 +63,12 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     public virtual void OnMessage(TMessage message)
     {
-        Logger.LogInformation("Message");
+        Logger.LogCritical("BaseClassMessage");
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken stoppingToken)
     {
         IsRunning = false;
         return Task.CompletedTask;
     }
 }
-;
