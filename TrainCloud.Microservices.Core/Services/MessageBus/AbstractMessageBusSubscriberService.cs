@@ -12,7 +12,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
  
     private string ProjectId { get; init; } = "traincloud";
 
-    private string SubscriptionId { get; set; } = string.Empty;
+    protected virtual string SubscriptionId { get; set; } = string.Empty;
 
     private SubscriberServiceApiClient Subscriber { get; init; }
 
