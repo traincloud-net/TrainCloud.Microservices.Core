@@ -64,7 +64,6 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             }
         }
     }
-
     public virtual async Task OnMessageAsync(TMessage message)
     {
         await Task.CompletedTask;

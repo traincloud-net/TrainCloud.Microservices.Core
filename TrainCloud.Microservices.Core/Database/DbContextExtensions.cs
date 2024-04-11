@@ -12,23 +12,11 @@ using System.Threading.Tasks;
 namespace TrainCloud.Microservices.Core.Database;
 public static class DbContextExtensions
 {
-    public static WebApplicationBuilder AddTrainCloudDbContext<TDbContext>(this WebApplicationBuilder webApplicationBuilder) where TDbContext : DbContext
+    public static WebApplicationBuilder AddTrainCloudDbContext<TDbContext, TDbContextImplementation>(this WebApplicationBuilder webApplicationBuilder) 
+        where TDbContext : DbContext
+        where TDbContextImplementation : TDbContext
     {
-        webApplicationBuilder.Services.AddDbContext<TDbContext>(options =>
-        {
-            switch (webApplicationBuilder.Environment.EnvironmentName)
-            {
-                case "Test":
-                case "Development":
-                    options.EnableDetailedErrors(true);
-                    options.UseInMemoryDatabase(webApplicationBuilder.Environment.ApplicationName);
-                    break;
-                case "Production":
-                    options.EnableDetailedErrors(false);
-                    options.UseNpgsql(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
-                    break;
-            }
-        });
+        webApplicationBuilder.Services.AddDbContext<TDbContext, TDbContextImplementation>();
 
         return webApplicationBuilder;
     }
