@@ -11,9 +11,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 {
     protected IServiceScopeFactory ServiceScopeFactory { get; init; }
 
-    private string SubscriptionId { get; init; }
-
-    private SubscriberServiceApiClient Subscriber { get; init; }
+    private string SubscriptionId { get; init; }    
 
     private bool IsRunning { get; set; } = true;
 
@@ -25,7 +23,6 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
     {
         ServiceScopeFactory = serviceScopeFactory;  
         SubscriptionId = subscriptionId;
-        Subscriber = SubscriberServiceApiClient.Create();
     }
 
     public Task StartAsync(CancellationToken stoppingToken)
@@ -44,7 +41,8 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
 
             // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
-            PullResponse response = await Subscriber.PullAsync(subscriptionName, maxMessages: 10);
+            SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
+            PullResponse response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
             foreach (ReceivedMessage received in response.ReceivedMessages)
             {
                 PubsubMessage msg = received.Message;
@@ -60,7 +58,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             // when we created the subscription) we'll receive the messages again when we next pull.
             if (response.ReceivedMessages.Count > 0)
             {
-                await Subscriber.AcknowledgeAsync(subscriptionName, response.ReceivedMessages.Select(m => m.AckId));
+                await subscriberClient.AcknowledgeAsync(subscriptionName, response.ReceivedMessages.Select(m => m.AckId));
             }
         }
     }
