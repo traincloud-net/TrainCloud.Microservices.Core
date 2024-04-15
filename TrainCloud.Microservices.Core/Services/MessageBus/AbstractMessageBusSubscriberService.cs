@@ -38,20 +38,16 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         while (IsRunning)
         {
             // Subscribe to the topic.
+            SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
             SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
 
             // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
-            SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
             PullResponse response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
             foreach (ReceivedMessage received in response.ReceivedMessages)
             {
-                PubsubMessage msg = received.Message;
-
-                string messageString = msg.Data.ToStringUtf8();
-
-                TMessage message = JsonSerializer.Deserialize<TMessage>(messageString)!;
-
-                await OnMessageAsync(message);
+                MemoryStream msMessage = new(received.Message.Data.ToByteArray());
+                TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
+                await OnMessageAsync(message!);
             }
 
             // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
