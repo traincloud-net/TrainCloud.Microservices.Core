@@ -42,11 +42,27 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
 
             // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
-            PullResponse response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
+            PullResponse? response = default;
+            try
+            {
+                response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message, ex);
+            }
+
+            if(response is null)
+            {
+                break;
+            }
+
             foreach (ReceivedMessage received in response.ReceivedMessages)
             {
                 MemoryStream msMessage = new(received.Message.Data.ToByteArray());
+
                 TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
+                
                 await OnMessageAsync(message!);
             }
 
@@ -58,6 +74,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             }
         }
     }
+
     public virtual async Task OnMessageAsync(TMessage message)
     {
         await Task.CompletedTask;
