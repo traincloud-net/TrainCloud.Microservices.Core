@@ -37,14 +37,15 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
     {
         while (IsRunning)
         {
-            // Subscribe to the topic.
-            SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
-            SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
-
-            // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
-            PullResponse? response = default;
             try
             {
+                // Subscribe to the topic.
+                SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
+                SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
+
+                // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
+                PullResponse? response = default;
+
                 response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
 
                 foreach (ReceivedMessage received in response.ReceivedMessages)
