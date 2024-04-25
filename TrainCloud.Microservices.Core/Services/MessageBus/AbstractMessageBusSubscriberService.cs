@@ -11,7 +11,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 {
     protected IServiceScopeFactory ServiceScopeFactory { get; init; }
 
-    private string SubscriptionId { get; init; }    
+    private string SubscriptionId { get; init; }
 
     private bool IsRunning { get; set; } = true;
 
@@ -21,7 +21,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
                                                string subscriptionId)
         : base(configuration, logger)
     {
-        ServiceScopeFactory = serviceScopeFactory;  
+        ServiceScopeFactory = serviceScopeFactory;
         SubscriptionId = subscriptionId;
     }
 
@@ -46,31 +46,26 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             try
             {
                 response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
+
+                foreach (ReceivedMessage received in response.ReceivedMessages)
+                {
+                    MemoryStream msMessage = new(received.Message.Data.ToByteArray());
+
+                    TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
+
+                    await OnMessageAsync(message!);
+                }
+
+                // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
+                // when we created the subscription) we'll receive the messages again when we next pull.
+                if (response.ReceivedMessages.Count > 0)
+                {
+                    await subscriberClient.AcknowledgeAsync(subscriptionName, response.ReceivedMessages.Select(m => m.AckId));
+                }
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex.Message, ex);
-            }
-
-            if(response is null)
-            {
-                break;
-            }
-
-            foreach (ReceivedMessage received in response.ReceivedMessages)
-            {
-                MemoryStream msMessage = new(received.Message.Data.ToByteArray());
-
-                TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
-                
-                await OnMessageAsync(message!);
-            }
-
-            // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
-            // when we created the subscription) we'll receive the messages again when we next pull.
-            if (response.ReceivedMessages.Count > 0)
-            {
-                await subscriberClient.AcknowledgeAsync(subscriptionName, response.ReceivedMessages.Select(m => m.AckId));
             }
         }
     }
