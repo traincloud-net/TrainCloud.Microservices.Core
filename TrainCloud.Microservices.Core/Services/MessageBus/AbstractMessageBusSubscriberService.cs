@@ -41,20 +41,27 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
             {
                 // Subscribe to the topic.
                 SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
+                Logger.LogDebug("SubscriberServiceApiClient object created");
+
                 SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
+                Logger.LogDebug($"SubscriptionName object created for project {subscriptionName.ProjectId}");
 
                 // Pull messages from the subscription. This will wait for some time if no new messages have been published yet.
                 PullResponse? response = default;
 
                 response = await subscriberClient.PullAsync(subscriptionName, maxMessages: 10);
+                Logger.LogDebug("Messages pulled");
 
                 foreach (ReceivedMessage received in response.ReceivedMessages)
                 {
-                    MemoryStream msMessage = new(received.Message.Data.ToByteArray());
+                    Logger.LogDebug("Processing Message");
 
+                    MemoryStream msMessage = new(received.Message.Data.ToByteArray());
                     TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
+                    Logger.LogTrace("TMessage deserialized");
 
                     await OnMessageAsync(message!);
+                    Logger.LogDebug("After OnMessageAsync");
                 }
 
                 // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
@@ -62,11 +69,12 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
                 if (response.ReceivedMessages.Count > 0)
                 {
                     await subscriberClient.AcknowledgeAsync(subscriptionName, response.ReceivedMessages.Select(m => m.AckId));
+                    Logger.LogDebug("Messages aknowledged");
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex.Message, ex);
+                Logger.LogError(ex.Message);
             }
         }
     }
