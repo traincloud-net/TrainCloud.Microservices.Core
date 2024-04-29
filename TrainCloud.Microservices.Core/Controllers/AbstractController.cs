@@ -127,35 +127,23 @@ public abstract class AbstractController<TController> : ControllerBase
         Logger = logger;
     }
 
-    protected ActionResult Created(object? model = null)
+    protected IActionResult Created(object? model = null)
     {
         return StatusCode(201, model);
     }
 
-    protected ActionResult NotAuthorized()
+    protected IActionResult NotAuthorized()
     {
         return StatusCode(401);
     }
 
-    protected ActionResult Forbidden()
+    protected IActionResult Forbidden()
     {
         return StatusCode(403);
     }
 
-    protected ActionResult UnsupportedMediaType()
+    protected IActionResult UnsupportedMediaType()
     {
         return StatusCode(415);
-    }
-
-    protected ActionResult InternalServerError(Exception ex)
-    {
-        Logger.LogError(ex.Message, ex);
-
-        if (WebHostEnvironment.IsDevelopment())
-        {
-            return StatusCode(500, ex.Message);
-        }
-
-        return StatusCode(500);
     }
 }
