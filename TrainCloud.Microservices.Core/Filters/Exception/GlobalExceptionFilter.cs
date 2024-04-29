@@ -27,14 +27,16 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
     {
         base.OnException(context);
 
-        System.Exception ex = context.Exception;
-
         Logger.LogCritical(context.Exception.Message, context.Exception);
 
         if (WebHostEnvironment.IsDevelopment())
         {
-            var x = new { Message = context.Exception.Message, StackTrace = context.Exception.StackTrace };
-            context.Result = new ObjectResult(x) { StatusCode = 500, };
+            dynamic responseMessage = new 
+            { 
+                Message = context.Exception.Message, 
+                StackTrace = context.Exception.StackTrace 
+            };
+            context.Result = new ObjectResult(responseMessage) { StatusCode = 500, };
         }
         else
         {
