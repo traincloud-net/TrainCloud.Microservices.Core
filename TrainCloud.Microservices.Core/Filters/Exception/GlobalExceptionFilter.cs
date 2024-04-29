@@ -33,7 +33,8 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
 
         if (WebHostEnvironment.IsDevelopment())
         {
-            context.Result = new ObjectResult(context.Exception) { StatusCode = 500, };
+            var x = new { Message = context.Exception.Message, StackTrace = context.Exception.StackTrace };
+            context.Result = new ObjectResult(x) { StatusCode = 500, };
         }
         else
         {
