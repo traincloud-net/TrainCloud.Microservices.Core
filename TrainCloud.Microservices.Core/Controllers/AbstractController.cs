@@ -146,4 +146,9 @@ public abstract class AbstractController<TController> : ControllerBase
     {
         return StatusCode(415);
     }
+
+    protected IActionResult Locked()
+    {
+        return StatusCode(423);
+    }
 }
