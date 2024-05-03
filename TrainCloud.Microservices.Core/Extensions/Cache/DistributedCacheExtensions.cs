@@ -8,6 +8,11 @@ namespace TrainCloud.Microservices.Core.Extensions.Cache;
 /// </summary>
 public static class DistributedCacheExtensions
 {
+    private static JsonSerializerOptions Options = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     /// <summary>
     /// Sets the object with the given key.
     /// </summary>
@@ -25,7 +30,7 @@ public static class DistributedCacheExtensions
     {
         using (var msObjectToCache = new MemoryStream())
         {
-            await JsonSerializer.SerializeAsync(msObjectToCache, objectToCache);
+            await JsonSerializer.SerializeAsync(msObjectToCache, objectToCache, Options, cancellationToken);
             byte[] objectBytes = msObjectToCache.ToArray();
 
             if (entryOptions is not null)
@@ -64,7 +69,7 @@ public static class DistributedCacheExtensions
 
         using (var msObjectFromCache = new MemoryStream(objectBytes))
         {
-            TObject? objectFromCache = await JsonSerializer.DeserializeAsync<TObject?>(msObjectFromCache);
+            TObject? objectFromCache = await JsonSerializer.DeserializeAsync<TObject?>(msObjectFromCache, Options, cancellationToken);
             return objectFromCache;
         }
     }

@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace TrainCloud.Microservices.Core.Filters.Validation;
 
+/// <summary>
+/// Works only for [FromBody] Parametes
+/// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
 public class ValidateModelFilterAttribute : ActionFilterAttribute
 {
