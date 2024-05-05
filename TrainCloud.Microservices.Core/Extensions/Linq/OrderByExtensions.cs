@@ -27,8 +27,8 @@ public static class OrderByExtensions
         {
             var nfo = type.FullName;
             PropertyInfo? pi = type.GetProperty(prop);
-            expr = Expression.Property(expr, pi);
-            type = pi.PropertyType;
+            expr = Expression.Property(expr, pi!);
+            type = pi!.PropertyType;
         }
         Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TQueryable), type);
         LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
@@ -41,6 +41,6 @@ public static class OrderByExtensions
                 .MakeGenericMethod(typeof(TQueryable), type)
                 .Invoke(null, new object[] { source, lambda });
 
-        return (IOrderedQueryable<TQueryable>)result;
+        return (IOrderedQueryable<TQueryable>)result!;
     }
 }

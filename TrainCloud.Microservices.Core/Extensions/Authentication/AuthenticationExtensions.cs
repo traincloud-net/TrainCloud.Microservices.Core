@@ -11,6 +11,12 @@ public static class AuthenticationExtensions
 {
     public static IServiceCollection AddTrainCloudAuthentication(this IServiceCollection services, AuthenticationOptions options)
     {
+        string? issuerSigningKey = Environment.GetEnvironmentVariable("JWT_ISSUERSIGNINGKEY");
+        if(issuerSigningKey is null)
+        {
+            issuerSigningKey = options.IssuerSigningKey;
+        }
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddCookie(IdentityConstants.ApplicationScheme)
                 .AddJwtBearer(jwtBearerOptions =>
@@ -23,7 +29,7 @@ public static class AuthenticationExtensions
                                            ValidateIssuerSigningKey = false,
                                            ValidIssuer = options.ValidIssuer,
                                            ValidAudience = options.ValidAudience,
-                                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.IssuerSigningKey))
+                                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerSigningKey))
                                        };
                                    });
 
