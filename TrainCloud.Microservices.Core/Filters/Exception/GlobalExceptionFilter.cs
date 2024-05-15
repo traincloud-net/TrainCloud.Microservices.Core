@@ -28,6 +28,13 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
         base.OnException(context);
 
         Logger.LogCritical(context.Exception.Message, context.Exception);
+        Logger.LogCritical(context.Exception.StackTrace, context.Exception);
+
+        if (context.Exception.InnerException is not null)
+        {
+            Logger.LogCritical(context.Exception.InnerException.Message, context.Exception.InnerException);
+            Logger.LogCritical(context.Exception.InnerException.StackTrace, context.Exception.InnerException);
+        }
 
         if (WebHostEnvironment.IsDevelopment())
         {
