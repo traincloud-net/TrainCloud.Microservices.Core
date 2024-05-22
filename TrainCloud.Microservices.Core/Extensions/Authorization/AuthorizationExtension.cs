@@ -93,12 +93,6 @@ public static class AuthorizationExtension
                     return false;
                 });
             });
-
-            authorizationOptions.AddPolicy("Scanner", authorizationPolicyBuilder =>
-            {
-                authorizationPolicyBuilder.RequireAuthenticatedUser();
-                authorizationPolicyBuilder.RequireRole("Administrator", "DataCustodian", "TenantOwner", "TenantDispatcher", "TenantUser", "TrainSpotter");
-            });
         });
 
         return services;
