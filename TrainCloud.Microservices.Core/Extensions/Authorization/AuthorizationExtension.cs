@@ -23,7 +23,8 @@ public static class AuthorizationExtension
 
                     if (authorizationHandleContext.User.IsInRole("TenantOwner") ||
                        authorizationHandleContext.User.IsInRole("TenantDispatcher") ||
-                       authorizationHandleContext.User.IsInRole("TenantUser"))
+                       authorizationHandleContext.User.IsInRole("TenantUser") ||
+                       authorizationHandleContext.User.IsInRole("TenantTfTrainee"))
                     {
                         Claim featureClaim = authorizationHandleContext.User.Claims.Where(c => c.Type == "Features").First();
                         Feature features = (Feature)int.Parse(featureClaim.Value);
@@ -51,7 +52,8 @@ public static class AuthorizationExtension
 
                     if (authorizationHandleContext.User.IsInRole("TenantOwner") ||
                        authorizationHandleContext.User.IsInRole("TenantDispatcher") ||
-                       authorizationHandleContext.User.IsInRole("TenantUser"))
+                       authorizationHandleContext.User.IsInRole("TenantUser") ||
+                       authorizationHandleContext.User.IsInRole("TenantTfTrainee"))
                     {
                         Claim featureClaim = authorizationHandleContext.User.Claims.Where(c => c.Type == "Features").First();
                         Feature features = (Feature)int.Parse(featureClaim.Value);
@@ -79,7 +81,8 @@ public static class AuthorizationExtension
 
                     if (authorizationHandleContext.User.IsInRole("TenantOwner") ||
                        authorizationHandleContext.User.IsInRole("TenantDispatcher") ||
-                       authorizationHandleContext.User.IsInRole("TenantUser"))
+                       authorizationHandleContext.User.IsInRole("TenantUser") ||
+                       authorizationHandleContext.User.IsInRole("TenantTfTrainee"))
                     {
                         Claim featureClaim = authorizationHandleContext.User.Claims.Where(c => c.Type == "Features").First();
                         Feature features = (Feature)int.Parse(featureClaim.Value);
