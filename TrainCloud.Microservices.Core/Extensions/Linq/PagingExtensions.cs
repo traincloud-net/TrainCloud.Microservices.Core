@@ -5,17 +5,17 @@ namespace TrainCloud.Microservices.Core.Extensions.Linq;
 
 public static class PagingExtensions
 {
-    public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> repoObjects,
+    public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> source,
                                                                                               IFilterModel filter,
                                                                                               PageModel<TItems> page)
     {
         switch (filter.Order)
         {
             case SortOrder.Ascending:
-                repoObjects = repoObjects.OrderBy($"{filter.OrderBy}");
+                source = source.OrderBy($"{filter.OrderBy}");
                 break;
             case SortOrder.Descending:
-                repoObjects = repoObjects.OrderByDescending($"{filter.OrderBy}");
+                source = source.OrderByDescending($"{filter.OrderBy}");
                 break;
         }
 
@@ -26,7 +26,7 @@ public static class PagingExtensions
 
         page.PageSize = filter.PageSize;
 
-        int repoObjectsCount = await repoObjects.CountAsync();
+        int repoObjectsCount = await source.CountAsync();
         if (repoObjectsCount > 0)
         {
             page.LastPage = (int)Math.Ceiling((decimal)repoObjectsCount / (decimal)filter.PageSize);
@@ -47,8 +47,9 @@ public static class PagingExtensions
         }
 
         int skip = (filter.PageNr - 1) * filter.PageSize;
-        repoObjects = repoObjects.Skip(skip).Take(filter.PageSize);
 
-        return repoObjects;
+        source = source.Skip(skip).Take(filter.PageSize);
+
+        return source;
     }
 }

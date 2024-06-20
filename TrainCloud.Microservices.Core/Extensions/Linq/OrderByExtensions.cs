@@ -19,28 +19,37 @@ public static class OrderByExtensions
 
     static IOrderedQueryable<TQueryable> ApplyOrder<TQueryable>(IQueryable<TQueryable> source, string property, string methodName)
     {
+        Type typeOfQueryable = typeof(TQueryable);
+
         string[] props = property.Split('.');
-        Type type = typeof(TQueryable);
-        ParameterExpression arg = Expression.Parameter(type, "x");
-        Expression expr = arg;
+
+        ParameterExpression paramExpr = Expression.Parameter(typeOfQueryable, "x");
+
+        Expression expr = paramExpr;
+
         foreach (string prop in props)
         {
-            var nfo = type.FullName;
-            PropertyInfo? pi = type.GetProperty(prop);
-            expr = Expression.Property(expr, pi!);
-            type = pi!.PropertyType;
+            PropertyInfo? piQueryable = typeOfQueryable.GetProperty(prop);
+
+            expr = Expression.Property(expr, piQueryable!);
+
+            typeOfQueryable = piQueryable!.PropertyType;
         }
-        Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TQueryable), type);
-        LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
 
-        object? result = typeof(Queryable).GetMethods().Single(
-                method => method.Name == methodName
-                        && method.IsGenericMethodDefinition
-                        && method.GetGenericArguments().Length == 2
-                        && method.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(TQueryable), type)
-                .Invoke(null, new object[] { source, lambda });
+        Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TQueryable), typeOfQueryable);
 
-        return (IOrderedQueryable<TQueryable>)result!;
+        LambdaExpression lambda = Expression.Lambda(delegateType, expr, paramExpr);
+
+        object? resultObject = typeof(Queryable).GetMethods()
+                                                .Single(method => method.Name == methodName && 
+                                                                  method.IsGenericMethodDefinition
+                                                                  && method.GetGenericArguments().Length == 2
+                                                                  && method.GetParameters().Length == 2)
+                                                .MakeGenericMethod(typeof(TQueryable), typeOfQueryable)
+                                                .Invoke(null, new object[] { source, lambda });
+
+        IOrderedQueryable<TQueryable> result = (IOrderedQueryable<TQueryable>)resultObject!;
+
+        return result;
     }
 }

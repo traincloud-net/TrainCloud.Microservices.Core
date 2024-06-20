@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace TrainCloud.Microservices.Core.Controllers;
 
+/// <summary>
+/// A basic controller all TrainCloud controllers inherit from
+/// </summary>
+/// <typeparam name="TController"></typeparam>
 public abstract class AbstractController<TController> : ControllerBase
 {
     protected IWebHostEnvironment WebHostEnvironment { get; init; }
@@ -18,6 +21,20 @@ public abstract class AbstractController<TController> : ControllerBase
 
     protected ILogger<TController> Logger { get; init; }
 
+    /// <summary>
+    /// Indicated if the current request is authenticated or not
+    /// </summary>
+    protected bool IsAnonymous
+    {
+        get
+        {
+            return (CurrentUserId == Guid.Empty);
+        }
+    }
+
+    /// <summary>
+    /// The current UserId in this request
+    /// </summary>
     protected Guid CurrentUserId
     {
         get
@@ -32,6 +49,10 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    /// <summary>
+    /// 
+    /// From JWT Data
+    /// </summary>
     protected string? CurrentUserDocumentId
     {
         get
