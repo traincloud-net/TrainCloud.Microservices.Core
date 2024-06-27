@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace TrainCloud.Microservices.Core.Filters.Exception;
 
@@ -50,6 +51,8 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
             context.Result = new StatusCodeResult(500);
         }
 
+        Debugger.Break();
+        
         context.ExceptionHandled = true;
     }
 }
