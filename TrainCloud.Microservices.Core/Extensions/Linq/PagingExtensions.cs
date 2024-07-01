@@ -8,7 +8,7 @@ public static class PagingExtensions
     public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> source,
                                                                                               IFilterModel filter,
                                                                                               PageModel<TItems> page,
-                                                                                              bool applyOrder = false)
+                                                                                              bool applyOrder = true)
     {
         if (applyOrder)
         {
