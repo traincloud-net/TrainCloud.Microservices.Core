@@ -7,20 +7,16 @@ public static class PagingExtensions
 {
     public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> source,
                                                                                               IFilterModel filter,
-                                                                                              PageModel<TItems> page,
-                                                                                              bool applyOrder = true)
+                                                                                              PageModel<TItems> page)
     {
-        if (applyOrder)
+        switch (filter.Order)
         {
-            switch (filter.Order)
-            {
-                case SortOrder.Ascending:
-                    source = source.OrderBy($"{filter.OrderBy}");
-                    break;
-                case SortOrder.Descending:
-                    source = source.OrderByDescending($"{filter.OrderBy}");
-                    break;
-            }
+            case SortOrder.Ascending:
+                source = source.OrderBy($"{filter.OrderBy}");
+                break;
+            case SortOrder.Descending:
+                source = source.OrderByDescending($"{filter.OrderBy}");
+                break;
         }
 
         if (filter.PageNr < 1)
