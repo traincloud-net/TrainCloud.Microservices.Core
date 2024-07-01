@@ -17,7 +17,7 @@ public static class OrderByExtensions
     public static IOrderedQueryable<TQueryable> ThenByDescending<TQueryable>(this IOrderedQueryable<TQueryable> source, string property)
         => ApplyOrder<TQueryable>(source, property, "ThenByDescending");
 
-    public static IOrderedQueryable<TQueryable> ApplyOrder<TQueryable>(IQueryable<TQueryable> source, string property, string methodName)
+    public static IOrderedQueryable<TQueryable> ApplyOrder<TQueryable>(this IQueryable<TQueryable> source, string property, string methodName)
     {
         Type typeOfQueryable = typeof(TQueryable);
         string[] props = property.Split('.');
