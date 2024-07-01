@@ -26,10 +26,10 @@ public static class PagingExtensions
 
         page.PageSize = filter.PageSize;
 
-        int repoObjectsCount = await source.CountAsync();
-        if (repoObjectsCount > 0)
+        page.TotalCount = await source.CountAsync();
+        if (page.TotalCount > 0)
         {
-            page.LastPage = (int)Math.Ceiling((decimal)repoObjectsCount / (decimal)filter.PageSize);
+            page.LastPage = (int)Math.Ceiling((decimal)page.TotalCount / (decimal)filter.PageSize);
         }
         else
         {
