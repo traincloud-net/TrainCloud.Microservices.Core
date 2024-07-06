@@ -25,7 +25,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         SubscriptionId = subscriptionId;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         Task newTask = new(async () => await DoWork());
 
@@ -54,6 +54,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
                     MemoryStream msMessage = new(received.Message.Data.ToByteArray());
                     TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
 
+                    // Raise the OnMessage Event in the implementation to process the message
                     await OnMessageAsync(message!);
                 }
 
@@ -76,7 +77,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         await Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         IsRunning = false;
         return Task.CompletedTask;
