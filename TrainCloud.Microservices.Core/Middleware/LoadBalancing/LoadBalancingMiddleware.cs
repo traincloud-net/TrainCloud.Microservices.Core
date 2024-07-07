@@ -18,9 +18,9 @@ public class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMiddlewar
 
     public Task Invoke(HttpContext httpContext)
     {
-        string hostName = httpContext.Request.Host.HasValue ? httpContext.Request.Host.Value : "";
+        string hostName = httpContext.Request.Host.HasValue ? httpContext.Request.Host.Host : "unknown";
         StringValues instanceName = new StringValues(new[] { hostName });
-        httpContext.Response.Headers.Append("TrainCloud-ServiceInstance", instanceName);
+        httpContext.Response.Headers.Append("TrainCloud-Service", instanceName);
 
         return Next(httpContext);
     }
