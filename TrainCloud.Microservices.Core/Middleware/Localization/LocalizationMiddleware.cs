@@ -17,23 +17,18 @@ public class LocalizationMiddleware : AbstractMiddleware<LocalizationMiddleware>
 
     public Task Invoke(HttpContext httpContext)
     {
-        string? trainCloudHeader = httpContext.Request.Headers["TrainCloud-Header"];
-        if (!string.IsNullOrEmpty(trainCloudHeader) && trainCloudHeader == "TrainCloud")
+        string? acceptLanguage = httpContext.Request.Headers["Accept-Language"];
+
+        string requestCulture = "en";
+        if (!string.IsNullOrEmpty(acceptLanguage))
         {
-            string? acceptLanguage = httpContext.Request.Headers["Accept-Language"];
-
-
-            string requestCulture = "en";
-            if (!string.IsNullOrEmpty(acceptLanguage))
-            {
-                requestCulture = acceptLanguage.Substring(0, 2);
-            }
-
-            CultureInfo culture = new(requestCulture);
-
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
+            requestCulture = acceptLanguage.Substring(0, 2);
         }
+
+        CultureInfo culture = new(requestCulture);
+
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
 
         return Next(httpContext);
     }
