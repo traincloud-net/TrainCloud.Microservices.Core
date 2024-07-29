@@ -23,14 +23,14 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
+        env:
+          NuGetPackageSourceCredentials_github: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
 
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
 
       - name: Build
         run: dotnet build --configuration Release /p:Version=${VERSION}
-        env:
-          NuGetPackageSourceCredentials_github: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
 
       - name: Pack
         run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
