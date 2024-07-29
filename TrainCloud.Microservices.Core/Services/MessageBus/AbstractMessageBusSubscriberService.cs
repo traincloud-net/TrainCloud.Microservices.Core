@@ -11,7 +11,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 {
     protected IServiceScopeFactory ServiceScopeFactory { get; init; }
 
-    private string SubscriptionId { get; init; }
+    protected string SubscriptionId { get; init; }
 
     protected bool IsRunning { get; private set; } = true;
 

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace TrainCloud.Microservices.Core.Middleware.LoadBalancing;
 
-public class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMiddleware>
+public sealed class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMiddleware>
 {
     public LoadBalancingMiddleware(RequestDelegate next,
                                    IConfiguration configuration,

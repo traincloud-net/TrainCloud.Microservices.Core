@@ -10,7 +10,7 @@ namespace TrainCloud.Microservices.Core.Filters.Validation;
 /// Works only for [FromBody] Parametes
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-public class ValidateModelFilterAttribute : ActionFilterAttribute
+public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
 {
     private Type ValidatorType { get; init; }
 
@@ -25,6 +25,7 @@ public class ValidateModelFilterAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         base.OnActionExecuting(context);
+
         using IServiceScope scope = context.HttpContext.RequestServices.CreateScope();
 
         var service = scope.ServiceProvider.GetService(ValidatorType)!;

@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace TrainCloud.Microservices.Core.Middleware.Localization;
 
-public class LocalizationMiddleware : AbstractMiddleware<LocalizationMiddleware>
+public sealed class LocalizationMiddleware : AbstractMiddleware<LocalizationMiddleware>
 {
     public LocalizationMiddleware(RequestDelegate next,
                                   IConfiguration configuration,

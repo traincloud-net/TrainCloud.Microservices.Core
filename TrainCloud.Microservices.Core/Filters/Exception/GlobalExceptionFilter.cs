@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace TrainCloud.Microservices.Core.Filters.Exception;
 
-public class GlobalExceptionFilter : ExceptionFilterAttribute
+public sealed class GlobalExceptionFilter : ExceptionFilterAttribute
 {
     private IWebHostEnvironment WebHostEnvironment { get; init; }
 

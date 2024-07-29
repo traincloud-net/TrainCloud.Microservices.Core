@@ -3,8 +3,22 @@ using TrainCloud.Models;
 
 namespace TrainCloud.Microservices.Core.Extensions.Linq;
 
+/// <summary>
+/// Extensions for paging in api objects (e.g.: Cars/Owners/CarLists/...)
+/// </summary>
 public static class PagingExtensions
 {
+    /// <summary>
+    /// Calculates a page for a EF Core repo with the given parameters.
+    /// </summary>
+    /// <typeparam name="TRepository">The type of the DbSet in the EF Core repo</typeparam>
+    /// <typeparam name="TItems">The type of the Model items in page.Items</typeparam>
+    /// <param name="source">EF Core repo to page.</param>
+    /// <param name="filter">Page settings (page size/ items per page)</param>
+    /// <param name="page">The page object to be filled</param>
+    /// <param name="orderItems">If true, the page gets ordered by the specified field in filter.OrderBy. 
+    ///                          If false, the data have to be ordered before calculating the page.</param>
+    /// <returns></returns>
     public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> source,
                                                                                               IFilterModel filter,
                                                                                               PageModel<TItems> page,

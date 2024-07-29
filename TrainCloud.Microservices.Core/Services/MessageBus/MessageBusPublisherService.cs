@@ -1,18 +1,15 @@
 ﻿using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
-public class MessageBusPublisherService : AbstractService<MessageBusPublisherService>, IMessageBusPublisherService
+public sealed class MessageBusPublisherService : AbstractService<MessageBusPublisherService>, IMessageBusPublisherService
 {
-    protected IWebHostEnvironment WebHostEnvironment { get; init; }
+    private IWebHostEnvironment WebHostEnvironment { get; init; }
  
     public MessageBusPublisherService(IConfiguration configuration,
                                       ILogger<MessageBusPublisherService> logger,
