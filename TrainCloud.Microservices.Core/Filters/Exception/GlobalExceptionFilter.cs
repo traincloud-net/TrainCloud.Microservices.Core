@@ -1,9 +1,4 @@
-﻿using Google.Apis.Logging;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
@@ -31,12 +26,6 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
         Logger.LogCritical(context.Exception.Message, context.Exception);
         Logger.LogCritical(context.Exception.StackTrace, context.Exception);
 
-        if (context.Exception.InnerException is not null)
-        {
-            Logger.LogCritical(context.Exception.InnerException.Message, context.Exception.InnerException);
-            Logger.LogCritical(context.Exception.InnerException.StackTrace, context.Exception.InnerException);
-        }
-
         if (WebHostEnvironment.IsDevelopment())
         {
             dynamic responseMessage = new 
@@ -45,13 +34,13 @@ public class GlobalExceptionFilter : ExceptionFilterAttribute
                 StackTrace = context.Exception.StackTrace 
             };
             context.Result = new ObjectResult(responseMessage) { StatusCode = 500, };
+
+            Debugger.Break();
         }
         else
         {
             context.Result = new StatusCodeResult(500);
         }
-
-        Debugger.Break();
         
         context.ExceptionHandled = true;
     }

@@ -4,10 +4,13 @@ using System.Text.Json;
 namespace TrainCloud.Microservices.Core.Extensions.Cache;
 
 /// <summary>
-/// Wraps IDistributedCache
+/// Wraps IDistributedCache with de/serialization
 /// </summary>
 public static class DistributedCacheExtensions
 {
+    /// <summary>
+    /// Options for the cache de/serialization
+    /// </summary>
     private static JsonSerializerOptions Options = new()
     {
         PropertyNameCaseInsensitive = true
@@ -28,6 +31,11 @@ public static class DistributedCacheExtensions
                                                      DistributedCacheEntryOptions? entryOptions = null,
                                                      CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new ArgumentException("key is null or empty");
+        }
+
         using (var msObjectToCache = new MemoryStream())
         {
             await JsonSerializer.SerializeAsync(msObjectToCache, objectToCache, Options, cancellationToken);
@@ -58,7 +66,7 @@ public static class DistributedCacheExtensions
     {
         if (string.IsNullOrEmpty(key))
         {
-            return default;
+            throw new ArgumentException("key is null or empty");
         }
 
         byte[]? objectBytes = await cache.GetAsync(key, cancellationToken);

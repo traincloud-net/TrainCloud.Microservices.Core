@@ -1,5 +1,14 @@
 ﻿# 🚆 TrainCloud.Microservices.Core
 
+* Controller
+* Cache
+* Linq (Sort/Paging)
+* QuestPdf
+* Swagger
+* Global Api Filters
+* Middleware
+* MessageBus (Google Cloud Pub/Sub)
+
 ## Status
 
 ### GitHub Actions

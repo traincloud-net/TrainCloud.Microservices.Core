@@ -13,7 +13,7 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     private string SubscriptionId { get; init; }
 
-    private bool IsRunning { get; set; } = true;
+    protected bool IsRunning { get; private set; } = true;
 
     public AbstractMessageBusSubscriberService(IConfiguration configuration,
                                                ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,

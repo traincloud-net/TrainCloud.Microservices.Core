@@ -2,15 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using System.Globalization;
 
 namespace TrainCloud.Microservices.Core.Middleware.LoadBalancing;
 
 public class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMiddleware>
 {
     public LoadBalancingMiddleware(RequestDelegate next,
-                                  IConfiguration configuration,
-                                  ILogger<LoadBalancingMiddleware> logger)
+                                   IConfiguration configuration,
+                                   ILogger<LoadBalancingMiddleware> logger)
         : base(next, configuration, logger)
     {
 
