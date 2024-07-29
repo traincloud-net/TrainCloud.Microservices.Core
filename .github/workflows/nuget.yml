@@ -16,15 +16,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.x    
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
 
       - name: Clean solution
         run: dotnet clean
 
       - name: Restore dependencies
         run: dotnet restore
-        env:
-          NuGetPackageSourceCredentials_github: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
+        # env:
+        #   NuGetPackageSourceCredentials_github: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
 
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
