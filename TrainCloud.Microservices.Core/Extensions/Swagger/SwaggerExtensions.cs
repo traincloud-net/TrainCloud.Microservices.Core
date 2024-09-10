@@ -79,11 +79,7 @@ public static class SwaggerExtensions
     public static WebApplication UseTrainCloudSwagger(this WebApplication webApplication)
     {
         webApplication.UseSwagger();
-
-        if (webApplication.Environment.IsDevelopment())
-        {
-            webApplication.UseSwaggerUI();
-        }
+        webApplication.UseSwaggerUI();
 
         return webApplication;
     }
