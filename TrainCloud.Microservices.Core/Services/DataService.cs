@@ -9,20 +9,21 @@ namespace TrainCloud.Microservices.Core.Services;
 /// Base for all service classes in the Microserivces which access a database
 /// </summary>
 /// <typeparam name="TService">The inheriting Service type</typeparam>
-/// <typeparam name="TDbContext">The DbContext, used in the inheriing servie</typeparam>
-public abstract class DataService<TService, TDbContext> : AbstractService<TService> where TDbContext : DbContext
+/// <typeparam name="TDbContext">The DbContext for the factory, used in the inheriting servie</typeparam>
+public abstract class DataService<TService, TDbContext> : AbstractService<TService> 
+    where TDbContext : DbContext
 {
-    protected TDbContext DbContext { get; init; }
+    protected IDbContextFactory<TDbContext> DbContextFactory { get; init; }
 
     protected IDistributedCache Cache { get; init; }
 
     protected DataService(IConfiguration configuration,
                           ILogger<TService> logger,
-                          TDbContext dbContext,
+                          IDbContextFactory<TDbContext> dbContextFactory,
                           IDistributedCache cache)
                           : base(configuration, logger)
     {
-        DbContext = dbContext;
+        DbContextFactory = dbContextFactory;
         Cache = cache;
     }
 }
