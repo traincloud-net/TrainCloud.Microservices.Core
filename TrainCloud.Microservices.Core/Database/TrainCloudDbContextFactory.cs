@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace TrainCloud.Microservices.Core.Extensions.Database;
+namespace TrainCloud.Microservices.Database;
 
 /// <summary>
 /// 
