@@ -83,6 +83,16 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    protected string? CurrentFullName
+    {
+        get
+        {
+            string? fullName = HttpContext?.User?.FindFirst("FullName")?.Value;
+
+            return fullName;
+        }
+    }
+
     protected List<string>? CurrentRoles
     {
         get
