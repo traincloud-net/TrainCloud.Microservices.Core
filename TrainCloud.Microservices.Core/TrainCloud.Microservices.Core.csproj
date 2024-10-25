@@ -15,7 +15,6 @@
 				<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
 				<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.16.0" />
 				<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
-				<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
 				<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 				<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
 				<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
