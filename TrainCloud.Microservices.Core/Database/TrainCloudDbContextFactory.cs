@@ -16,7 +16,7 @@ public sealed class TrainCloudDbContextFactory<TGenericDbContext, TPostgresDbCon
 {
     private IConfiguration Configuration { get; init; }
 
-    public TrainCloudDbContextFactory(DbContextOptions options, IConfiguration configuration)
+    public TrainCloudDbContextFactory(IConfiguration configuration)
     {
         Configuration = configuration;
     }
@@ -33,6 +33,8 @@ public sealed class TrainCloudDbContextFactory<TGenericDbContext, TPostgresDbCon
             case "sqlite":
                 dbContext = (TSqliteDbContext)Activator.CreateInstance(typeof(TSqliteDbContext), Configuration)!;
                 break;
+            default:
+                throw new ArgumentException($"Database:Provider: {databaseProvider} is invalid");
         }
 
         return dbContext!;
