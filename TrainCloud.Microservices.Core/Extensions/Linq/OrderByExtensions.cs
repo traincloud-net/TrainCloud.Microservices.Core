@@ -30,18 +30,32 @@ public static class OrderByExtensions
         foreach (string prop in props)
         {
             PropertyInfo? piQueryable = typeOfQueryable.GetProperty(prop);
-            expr = Expression.Property(expr, piQueryable!);
-            typeOfQueryable = piQueryable!.PropertyType;
+            if (piQueryable is not null)
+            {
+                expr = Expression.Property(expr, piQueryable);
+                typeOfQueryable = piQueryable.PropertyType;
+            }
         }
 
         Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TQueryable), typeOfQueryable);
         LambdaExpression lambda = Expression.Lambda(delegateType, expr, paramExpr);
 
         object? resultObject = typeof(Queryable).GetMethods()
-                                                .Single(method => method.Name == methodName && 
-                                                                  method.IsGenericMethodDefinition
-                                                                  && method.GetGenericArguments().Length == 2
-                                                                  && method.GetParameters().Length == 2)
+                                                .Single(method =>
+                                                {
+                                                    Type[] methodGenericArguments = method.GetGenericArguments();
+                                                    ParameterInfo[] methodParameters = method.GetParameters();
+
+                                                    if (method.Name == methodName &&
+                                                       method.IsGenericMethodDefinition &&
+                                                       methodGenericArguments.Length == 2 &&
+                                                       methodParameters.Length == 2)
+                                                    {
+                                                        return true;
+                                                    }
+
+                                                    return false;
+                                                })
                                                 .MakeGenericMethod(typeof(TQueryable), typeOfQueryable)
                                                 .Invoke(null, new object[] { source, lambda });
 
