@@ -20,7 +20,7 @@
 				<PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
 				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
 				<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-				<PackageReference Include="TrainCloud.Models" Version="0.0.5" />
+				<PackageReference Include="TrainCloud.Models" Version="0.0.6" />
 				<PackageReference Include="FluentValidation" Version="11.10.0" />
 		</ItemGroup>
 
