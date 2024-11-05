@@ -16,27 +16,11 @@ public static class PagingExtensions
     /// <param name="source">EF Core repo to page.</param>
     /// <param name="filter">Page settings (page size/ items per page)</param>
     /// <param name="page">The page object to be filled</param>
-    /// <param name="orderItems">If true, the page gets ordered by the specified field in filter.OrderBy. 
-    ///                          If false, the data have to be ordered before calculating the page.</param>
     /// <returns></returns>
     public static async Task<IQueryable<TRepository>> CalculatePageAsync<TRepository, TItems>(this IQueryable<TRepository> source,
                                                                                               IFilterModel filter,
-                                                                                              PageModel<TItems> page,
-                                                                                              bool orderItems = true)
+                                                                                              PageModel<TItems> page)
     {
-        if (orderItems)
-        {
-            switch (filter.Order)
-            {
-                case SortOrder.Ascending:
-                    source = source.OrderBy($"{filter.OrderBy}");
-                    break;
-                case SortOrder.Descending:
-                    source = source.OrderByDescending($"{filter.OrderBy}");
-                    break;
-            }
-        }
-
         if (filter.PageNr < 1)
         {
             filter.PageNr = 1;
