@@ -141,7 +141,7 @@ public abstract class AbstractController<TController> : ControllerBase
     {
         get
         {
-            string? vkm = HttpContext?.User?.FindFirst("VKM")?.Value;
+            string? vkm = HttpContext?.User?.FindFirst("Vkm")?.Value;
 
             return vkm;
         }
