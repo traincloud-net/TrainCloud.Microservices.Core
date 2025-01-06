@@ -20,14 +20,18 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     protected bool IsRunning { get; private set; } = true;
 
+    protected bool IsSingleRegionService { get; private set; } = true;
+
     protected AbstractMessageBusSubscriberService(IConfiguration configuration,
                                                   ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,
                                                   IServiceScopeFactory serviceScopeFactory,
-                                                  string subscriptionId)
+                                                  string subscriptionId,
+                                                  bool isSingleRegionService)
         : base(configuration, logger)
     {
         ServiceScopeFactory = serviceScopeFactory;
         SubscriptionId = subscriptionId;
+        IsSingleRegionService = isSingleRegionService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -58,11 +62,18 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
                 foreach (ReceivedMessage received in response.ReceivedMessages)
                 {
+                    received.Message.Attributes.TryGetValue("TrainCloud-Service", out string senderTrainCloudRegion);
                     MemoryStream msMessage = new(received.Message.Data.ToByteArray());
                     TMessage? message = await JsonSerializer.DeserializeAsync<TMessage>(msMessage);
 
-                    // Raise the OnMessage Event in the implementation to process the message
-                    await OnMessageAsync(message!);
+                    //Process the message only if the sender is in the same region or if the implementation is in running in a single instance
+                    // To prevent all redundant servers are processing the same message
+                    if(IsSingleRegionService ||
+                       trainCloudRegion.ToLower() == senderTrainCloudRegion.ToLower())
+                    {
+                        // Raise the OnMessage Event in the implementation to process the message
+                        await OnMessageAsync(message!);
+                    }
                 }
 
                 // Acknowledge that we've received the messages. If we don't do this within 60 seconds (as specified
