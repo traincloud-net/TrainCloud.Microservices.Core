@@ -20,10 +20,10 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
 
     protected bool IsRunning { get; private set; } = true;
 
-    public AbstractMessageBusSubscriberService(IConfiguration configuration,
-                                               ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,
-                                               IServiceScopeFactory serviceScopeFactory,
-                                               string subscriptionId)
+    protected AbstractMessageBusSubscriberService(IConfiguration configuration,
+                                                  ILogger<AbstractMessageBusSubscriberService<TMessage>> logger,
+                                                  IServiceScopeFactory serviceScopeFactory,
+                                                  string subscriptionId)
         : base(configuration, logger)
     {
         ServiceScopeFactory = serviceScopeFactory;
@@ -44,8 +44,10 @@ public abstract class AbstractMessageBusSubscriberService<TMessage> : AbstractSe
         {
             try
             {
+                string trainCloudRegion = Environment.GetEnvironmentVariable("TRAINCLOUD_REGION") ?? "unknown";
+
                 // Subscribe to the topic.
-                SubscriberServiceApiClient subscriberClient = SubscriberServiceApiClient.Create();
+                SubscriberServiceApiClient subscriberClient = await SubscriberServiceApiClient.CreateAsync();
 
                 SubscriptionName subscriptionName = new SubscriptionName("traincloud", SubscriptionId);
 

@@ -17,9 +17,8 @@ public sealed class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMi
 
     public Task Invoke(HttpContext httpContext)
     {
-        string hostName = httpContext.Request.Host.HasValue ? httpContext.Request.Host.Host : "unknown";
-        StringValues instanceName = new StringValues(new[] { hostName });
-        httpContext.Response.Headers.Append("TrainCloud-Service", instanceName);
+        string trainCloudRegion = Environment.GetEnvironmentVariable("TRAINCLOUD_REGION") ?? "unknown";
+        httpContext.Response.Headers.Append("TrainCloud-Service", trainCloudRegion);
 
         return Next(httpContext);
     }

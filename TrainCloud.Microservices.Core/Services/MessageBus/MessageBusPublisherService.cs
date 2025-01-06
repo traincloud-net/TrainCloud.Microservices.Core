@@ -13,7 +13,7 @@ namespace TrainCloud.Microservices.Core.Services.MessageBus;
 public sealed class MessageBusPublisherService : AbstractService<MessageBusPublisherService>, IMessageBusPublisherService
 {
     private IWebHostEnvironment WebHostEnvironment { get; init; }
- 
+
     public MessageBusPublisherService(IConfiguration configuration,
                                       ILogger<MessageBusPublisherService> logger,
                                       IWebHostEnvironment webHostEnvironment)
@@ -31,18 +31,20 @@ public sealed class MessageBusPublisherService : AbstractService<MessageBusPubli
     /// <returns></returns>
     public async Task SendMessageAsync<TData>(string topicId, TData data)
     {
-        PublisherServiceApiClient publisher = PublisherServiceApiClient.Create();
+        PublisherServiceApiClient publisher = await PublisherServiceApiClient.CreateAsync();
 
         string projectId = "traincloud";
         TopicName topicName = new TopicName(projectId, topicId);
 
         string dataString = JsonSerializer.Serialize(data);
-
+        string trainCloudRegion = Environment.GetEnvironmentVariable("TRAINCLOUD_REGION") ?? "unknown";
         PubsubMessage message = new PubsubMessage
         {
             Data = ByteString.CopyFromUtf8(dataString),
-            Attributes = { { "EnvironmentName", WebHostEnvironment.EnvironmentName },
-                           { "ApplicationName", WebHostEnvironment.ApplicationName }}
+            Attributes = { { "TrainCloud-EnvironmentName", WebHostEnvironment.EnvironmentName },
+                           { "ApplicationName", WebHostEnvironment.ApplicationName },
+                           { "TrainCloud-Service", trainCloudRegion }
+                    }
         };
 
         await publisher.PublishAsync(topicName, new[] { message });
