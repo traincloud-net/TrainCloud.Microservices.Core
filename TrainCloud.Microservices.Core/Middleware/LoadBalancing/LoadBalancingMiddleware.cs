@@ -18,9 +18,9 @@ public sealed class LoadBalancingMiddleware : AbstractMiddleware<LoadBalancingMi
     public Task Invoke(HttpContext httpContext)
     {
         string trainCloudRegion = Environment.GetEnvironmentVariable("TRAINCLOUD_REGION") ?? "unknown";
-        string trainEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "unknown";
+        string trainCloudEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "unknown";
         httpContext.Response.Headers.Append("TrainCloud-Service-Region", trainCloudRegion);
-        httpContext.Response.Headers.Append("TrainCloud-Service-Environment", trainEnvironment);
+        httpContext.Response.Headers.Append("TrainCloud-Service-Environment", trainCloudEnvironment);
 
         return Next(httpContext);
     }
