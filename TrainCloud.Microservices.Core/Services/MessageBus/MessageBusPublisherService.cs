@@ -41,10 +41,9 @@ public sealed class MessageBusPublisherService : AbstractService<MessageBusPubli
         PubsubMessage message = new PubsubMessage
         {
             Data = ByteString.CopyFromUtf8(dataString),
-            Attributes = { { "TrainCloud-EnvironmentName", WebHostEnvironment.EnvironmentName },
-                           { "ApplicationName", WebHostEnvironment.ApplicationName },
-                           { "TrainCloud-Service", trainCloudRegion }
-                    }
+            Attributes = { { "ApplicationName", WebHostEnvironment.ApplicationName },
+                           { "TrainCloud-Environment", WebHostEnvironment.EnvironmentName },
+                           { "TrainCloud-Service", trainCloudRegion } }
         };
 
         await publisher.PublishAsync(topicName, new[] { message });
