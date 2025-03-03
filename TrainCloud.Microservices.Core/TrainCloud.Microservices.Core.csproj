@@ -12,17 +12,16 @@
 
 		<ItemGroup>
 				<PackageReference Include="AutoMapper" Version="14.0.0" />
-				<PackageReference Include="QuestPDF" Version="2025.1.2" />
+				<PackageReference Include="QuestPDF" Version="2025.1.4" />
 				<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
 				<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.21.0" />
 				<PackageReference Include="Google.Cloud.Storage.V1" Version="4.10.0" />
 				<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
 				<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
-				<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
+				<PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
 				<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-				<PackageReference Include="TrainCloud.Models" Version="0.0.7" />
-				<PackageReference Include="FluentValidation" Version="11.11.0" />
+				<PackageReference Include="TrainCloud.Models" Version="0.0.8" />
 		</ItemGroup>
 
 </Project>

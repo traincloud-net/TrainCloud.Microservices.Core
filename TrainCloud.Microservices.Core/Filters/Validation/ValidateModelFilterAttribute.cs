@@ -1,10 +1,7 @@
 ﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 
 namespace TrainCloud.Microservices.Core.Filters.Validation;
