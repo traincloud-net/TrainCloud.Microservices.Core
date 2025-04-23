@@ -10,13 +10,13 @@ namespace TrainCloud.Microservices.Core.Filters.Exception;
 /// <summary>
 /// Global exception handler for all Microservices
 /// </summary>
-public sealed class GlobalExceptionFilter : ExceptionFilterAttribute
+public sealed class GlobalExceptionFilterAttribute : ExceptionFilterAttribute
 {
     private IWebHostEnvironment WebHostEnvironment { get; init; }
 
-    private ILogger<GlobalExceptionFilter> Logger { get; init; }
+    private ILogger<GlobalExceptionFilterAttribute> Logger { get; init; }
 
-    public GlobalExceptionFilter(IWebHostEnvironment webHostEnvironment, ILogger<GlobalExceptionFilter> logger)
+    public GlobalExceptionFilterAttribute(IWebHostEnvironment webHostEnvironment, ILogger<GlobalExceptionFilterAttribute> logger)
     {
         WebHostEnvironment = webHostEnvironment;
         Logger = logger;
@@ -26,8 +26,8 @@ public sealed class GlobalExceptionFilter : ExceptionFilterAttribute
     {
         base.OnException(context);
 
-        Logger.LogCritical(context.Exception.Message, context.Exception);
-        Logger.LogCritical(context.Exception.StackTrace, context.Exception);
+        Logger.LogCritical(context.Exception.Message);
+        Logger.LogCritical(context.Exception.StackTrace);
 
         if (WebHostEnvironment.IsDevelopment())
         {

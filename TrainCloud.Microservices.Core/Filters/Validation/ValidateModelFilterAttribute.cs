@@ -37,15 +37,20 @@ public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
 
         using IServiceScope scope = context.HttpContext.RequestServices.CreateScope();
 
-        var service = scope.ServiceProvider.GetService(ValidatorType)!;
+        object validatorService = scope.ServiceProvider.GetService(ValidatorType)!;
 
-        foreach (var arg in context.ActionArguments)
+        IEnumerable<object?>? argumentValues = context.ActionArguments.Select(arg => arg.Value);
+
+        foreach (object? argumentValue in argumentValues)
         {
-            if (arg.Value!.GetType() == ModelType)
+            if (argumentValue is not null 
+                && argumentValue.GetType() == ModelType)
             {
                 MethodInfo mi = ValidatorType.GetMethod("Validate")!;
 
-                ValidationResult? validationResult = mi!.Invoke(service, new object[] { arg.Value! }) as ValidationResult;
+                object[] parameters = { argumentValue! };
+
+                ValidationResult? validationResult = mi!.Invoke(validatorService, parameters) as ValidationResult;
 
                 if (validationResult is not null && !validationResult.IsValid)
                 {
