@@ -147,6 +147,16 @@ public abstract class AbstractController<TController> : ControllerBase
         }
     }
 
+    protected string? CurrentUserGroup
+    {
+        get
+        {
+            string? vkm = HttpContext?.User?.FindFirst("Group")?.Value;
+
+            return vkm;
+        }
+    }
+
     protected AbstractController(IWebHostEnvironment webHostEnvironment,
                                  IHttpContextAccessor httpContextAccessor,
                                  IConfiguration configuration,
