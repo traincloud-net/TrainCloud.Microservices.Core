@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Text.Json;
 
 namespace TrainCloud.Microservices.Core.Filters.Validation;
 
@@ -19,16 +21,21 @@ namespace TrainCloud.Microservices.Core.Filters.Validation;
 /// public async Task<IActionResult> PostAsync([FromBody] PostCarModel postModel)
 /// </example>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
+public sealed class ValidateModelFilterAttribute<TLogger> : ActionFilterAttribute
 {
     private Type ValidatorType { get; init; }
 
     private Type ModelType { get; init; }
 
-    public ValidateModelFilterAttribute(Type validatorType, Type modelType)
+    private Logger<TLogger>? Logger { get; init; }
+
+    private bool LoggerEnabled => Logger is not null;
+
+    public ValidateModelFilterAttribute(Type validatorType, Type modelType, Logger<TLogger>? logger = null)
     {
         ValidatorType = validatorType;
         ModelType = modelType;
+        Logger = logger;
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -41,11 +48,18 @@ public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
 
         IEnumerable<object?>? argumentValues = context.ActionArguments.Select(arg => arg.Value);
 
+
         foreach (object? argumentValue in argumentValues)
         {
-            if (argumentValue is not null 
+            if (argumentValue is not null
                 && argumentValue.GetType() == ModelType)
             {
+                if (LoggerEnabled)
+                {
+                    string? modelJsonSTring = JsonSerializer.Serialize(argumentValue);
+                    Logger!.LogInformation($"Json: {modelJsonSTring}");
+                }
+
                 MethodInfo mi = ValidatorType.GetMethod("Validate")!;
 
                 object[] parameters = { argumentValue! };
