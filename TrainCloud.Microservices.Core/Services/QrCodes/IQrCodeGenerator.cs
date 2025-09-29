@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TrainCloud.Microservices.Core.Services.QrCodes;
 
-namespace TrainCloud.Microservices.Core.Services.QrCodes;
 internal interface IQrCodeGenerator
 {
+    byte[] GenerateQrCodePng(string codeData);
 }
