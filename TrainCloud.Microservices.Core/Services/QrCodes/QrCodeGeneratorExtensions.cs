@@ -14,7 +14,6 @@ public static class QrCodeGeneratorExtensions
     public static IServiceCollection AddTrainCloudQrCodeGenerator(this IServiceCollection services)
     {
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
-
         return services;
     }
 }
