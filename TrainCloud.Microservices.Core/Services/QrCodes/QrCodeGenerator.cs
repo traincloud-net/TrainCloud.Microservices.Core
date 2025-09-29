@@ -9,7 +9,7 @@ public sealed class QrCodeGenerator : IQrCodeGenerator
 
     public System.Drawing.Color LightColor { get; } = System.Drawing.Color.White;
 
-    public int PixelsPerModule { get; } = 5;
+    public int PixelsPerModule { get; } = 25;
 
     public int IconSizePercent { get; } = 20;
 
