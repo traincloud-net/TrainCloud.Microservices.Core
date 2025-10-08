@@ -3,7 +3,7 @@
 /// <summary>
 /// The MessageBusPublisherService is a generic Service for all Microservices, to send a dataobject (Message) to Google Cloud Pub/Sub
 /// </summary>
-public interface IMessageBusPublisherService
+public interface IMessageBusPublisher
 {
-    Task SendMessageAsync<TData>(string topicId, TData data);
+    Task SendMessageAsync<TData>(string queueName, TData data);
 }

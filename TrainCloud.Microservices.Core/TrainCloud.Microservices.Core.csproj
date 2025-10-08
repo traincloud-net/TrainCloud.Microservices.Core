@@ -11,18 +11,19 @@
 		</ItemGroup>
 
 		<ItemGroup>
+				<PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+				<PackageReference Include="KubernetesClient" Version="17.0.14" />
 				<PackageReference Include="AutoMapper" Version="15.0.1" />
 				<PackageReference Include="QuestPDF" Version="2025.7.2" />
 				<PackageReference Include="ScottPlot" Version="5.0.56" />
 				<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.1" />
 				<PackageReference Include="SkiaSharp" Version="3.119.1" />
 				<PackageReference Include="QRCoder" Version="1.6.0" />				
-				<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.27.0" />
 				<PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
 				<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 				<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
-				<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
-				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.4" />
+				<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.5" />
+				<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.5" />
 				<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="9.0.0" />
 				<PackageReference Include="TrainCloud.Models" Version="0.0.13" />
 		</ItemGroup>

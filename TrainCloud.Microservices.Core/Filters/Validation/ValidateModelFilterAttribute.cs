@@ -43,7 +43,6 @@ public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
 
         IEnumerable<object?>? argumentValues = context.ActionArguments.Select(arg => arg.Value);
 
-
         foreach (object? argumentValue in argumentValues)
         {
             if (argumentValue is not null
