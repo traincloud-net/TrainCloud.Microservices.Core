@@ -5,7 +5,10 @@ namespace TrainCloud.Microservices.Core.Extensions.Kestrel;
 
 public static class KestrelExtensions
 {
-    public static IWebHostBuilder ConfigureTrainCloudKestrel(this IWebHostBuilder builder, int applicationPort, bool useHttps)
+    public static IWebHostBuilder ConfigureTrainCloudKestrel(this IWebHostBuilder builder, int applicationPort, 
+                                                             bool useHttps,
+                                                             bool useHealth,
+                                                             bool useMetrics)
     {
         builder.ConfigureKestrel(options =>
         {
@@ -20,17 +23,23 @@ public static class KestrelExtensions
                 listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
             });
 
-            // For MapHealthChecks http://*:8080/health
-            options.Listen(System.Net.IPAddress.Any, 8080, listenOptions =>
+            if(useHealth)
             {
-                listenOptions.Protocols = HttpProtocols.Http1;
-            });
+                // For MapHealthChecks http://*:8080/health
+                options.Listen(System.Net.IPAddress.Any, 8080, listenOptions =>
+                {
+                    listenOptions.Protocols = HttpProtocols.Http1;
+                });
+            }
 
-            // For Prometheus metrics http://*:9090/metrics
-            options.Listen(System.Net.IPAddress.Any, 9090, listenOptions =>
+            if (useMetrics)
             {
-                listenOptions.Protocols = HttpProtocols.Http1;
-            });
+                // For Prometheus metrics http://*:9090/metrics
+                options.Listen(System.Net.IPAddress.Any, 9090, listenOptions =>
+                {
+                    listenOptions.Protocols = HttpProtocols.Http1;
+                });
+            }
         });
 
         return builder;
