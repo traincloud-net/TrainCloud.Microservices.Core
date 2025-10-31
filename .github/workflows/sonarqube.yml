@@ -1,6 +1,7 @@
 name: SonarQube without test coverage
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
