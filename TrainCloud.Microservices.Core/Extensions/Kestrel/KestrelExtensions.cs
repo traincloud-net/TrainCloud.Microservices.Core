@@ -23,13 +23,13 @@ public static class KestrelExtensions
             // For MapHealthChecks http://*:8080/health
             options.Listen(System.Net.IPAddress.Any, 8080, listenOptions =>
             {
-                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                listenOptions.Protocols = HttpProtocols.Http1;
             });
 
             // For Prometheus metrics http://*:9090/metrics
             options.Listen(System.Net.IPAddress.Any, 9090, listenOptions =>
             {
-                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                listenOptions.Protocols = HttpProtocols.Http1;
             });
         });
 
